@@ -39,11 +39,11 @@ services:
 
   # install composer
   composer:
-    image: composer:1.6
+    image: composer:2.2
     volumes: 
       # to composer has access to the app files
-      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+      - ${APP_PATH_HOST}/server:${APP_PATH_CONTAINER}/server
     # workdir where scripts run
-    working_dir: ${APP_PATH_CONTAINER}
+    working_dir: ${APP_PATH_CONTAINER}/server
     # install composer dependencies
     command: composer install

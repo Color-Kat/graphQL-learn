@@ -1,0 +1,19 @@
+{
+    "name": "colorkat/graphql-learn",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Colorkat\\GraphqlLearn\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Color-Kat",
+            "email": "katik7979@gmail.com"
+        }
+    ],
+    "require": {
+        "webonyx/graphql-php": "^14.11"
+    }
+}
