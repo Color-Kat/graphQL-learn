@@ -4,7 +4,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Colorkat\\GraphqlLearn\\": "src/"
+            "src\\": "src",
+            "graphql\\": "graphql"
         }
     },
     "authors": [

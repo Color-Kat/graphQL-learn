@@ -2,29 +2,30 @@
 
 require_once('vendor/autoload.php');
 
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
+use graphql\Types;
+use src\Db;
 
-$queryType = new ObjectType([
-    'name' => 'Query',
-    'fields' => [
-        'echo' => [
-            'type' => Type::string(),
-            'args' => [
-                'message' => Type::nonNull(Type::string()),
-            ],
-            'resolve' => function ($rootValue, $args) {
-                return $rootValue['prefix'] . $args['message'];
-            }
-        ],
-    ],
-]);
+//$queryType = new ObjectType([
+//    'name' => 'Query',
+//    'fields' => [
+//        'echo' => [
+//            'type' => Type::string(),
+//            'args' => [
+//                'message' => Type::nonNull(Type::string()),
+//            ],
+//            'resolve' => function ($rootValue, $args) {
+//                return $rootValue['prefix'] . $args['message'];
+//            }
+//        ],
+//    ],
+//]);
 
+Db::connectDb();
 
 $schema = new Schema([
-    'query' => $queryType
+    'query' => Types::user()
 ]);
 
 $rawInput = file_get_contents('php://input');
