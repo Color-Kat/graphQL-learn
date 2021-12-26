@@ -12,7 +12,7 @@ class CatType extends ObjectType
         $config = [
             'fields' => function(){
                 return [
-                    'id' => Types::int(),
+                    'id' => Types::id(),
                     'name' => Types::string(),
                     'owner_id' => Types::int()
                 ];

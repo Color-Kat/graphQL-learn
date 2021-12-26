@@ -15,7 +15,7 @@ class UserType extends ObjectType
             'description' => 'user',
             'fields' => function () {
                 return [
-                    'id' => ['type' => Types::int()],
+                    'id' => ['type' => Types::id()],
                     'name' => ['type' => Types::string()],
                     'cats' => [
                         'type' => Types::listOf(Types::cat()),

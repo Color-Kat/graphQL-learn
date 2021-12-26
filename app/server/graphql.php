@@ -25,7 +25,8 @@ use src\Db;
 Db::connectDb();
 
 $schema = new Schema([
-    'query' => Types::query()
+    'query' => Types::query(),
+    'mutation' => Types::mutation()
 ]);
 
 $rawInput = file_get_contents('php://input');

@@ -16,18 +16,22 @@ class QueryType extends ObjectType
                     'hello' => [
                         'type'    => Types::string(),
                         'resolve' => function () {
-                            return 123;
+                            return 'GraphQL';
+                        }
+                    ],
+                    'users' => [
+                        'type' => Types::listOf(Types::user()),
+                        'resolve' => function(){
+                            return Db::query('SELECT * FROM users');
                         }
                     ],
                     'user'  => [
                         'type'    => Types::user(),
                         'args'    => [
-                            'id' => Types::int()
+                            'id' => Types::id()
                         ],
                         'resolve' => function ($root, $args) {
-                            $user = Db::query('SELECT * FROM users WHERE id = :id', ['id' => $args['id']])[0];
-//                            print_r($user);
-                            return $user;
+                            return Db::query('SELECT * FROM users WHERE id = :id', ['id' => $args['id']])[0];
                         }
                     ]
                 ];

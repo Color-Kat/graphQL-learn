@@ -76,6 +76,9 @@ class Db
         $stmt = self::$db->prepare($sql);
         $stmt->execute($params);
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+//        print_r( !empty($res) ? $res : self::$db->lastInsertId());
+
+        return !empty($res) ? $res : self::$db->lastInsertId();
     }
 }
