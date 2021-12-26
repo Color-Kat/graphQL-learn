@@ -25,7 +25,7 @@ use src\Db;
 Db::connectDb();
 
 $schema = new Schema([
-    'query' => Types::user()
+    'query' => Types::query()
 ]);
 
 $rawInput = file_get_contents('php://input');
@@ -34,8 +34,7 @@ $query = $input['query'];
 $variableValues = $input['variables'] ?? [];
 
 try {
-    $rootValue = ['prefix' => 'You said: '];
-    $result = GraphQL::executeQuery($schema, $query, $rootValue, null, $variableValues);
+    $result = GraphQL::executeQuery($schema, $query, null, null, $variableValues);
     $output = $result->toArray();
 } catch (\Exception $e) {
     $output = [

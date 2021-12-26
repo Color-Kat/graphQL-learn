@@ -4,6 +4,7 @@ namespace graphql\types;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use graphql\Types;
 use src\Db;
 
 class UserType extends ObjectType
@@ -11,14 +12,18 @@ class UserType extends ObjectType
     public function __construct()
     {
         $config = [
+            'description' => 'user',
             'fields' => function () {
                 return [
-                    'getUserName' => [
-                        'type'    => Type::string(),
-                        'resolve' => function () {
-                            return Db::query('SELECT name FROM users WHERE id = 1')[0]['name'];
+                    'id' => ['type' => Types::int()],
+                    'name' => ['type' => Types::string()],
+                    'cats' => [
+                        'type' => Types::listOf(Types::cat()),
+                        'resolve' => function($root){
+                            return Db::query('SELECT * FROM cats WHERE owner_id = :owner_id', ['owner_id' => $root['id']]);
                         }
-                    ]
+                    ],
+                    'reg_date' => ['type' => Types::string()],
                 ];
             }
         ];
