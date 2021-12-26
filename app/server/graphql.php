@@ -32,10 +32,10 @@ $schema = new Schema([
 $rawInput = file_get_contents('php://input');
 $input = json_decode($rawInput, true);
 $query = $input['query'];
-$variableValues = $input['variables'] ?? [];
+$variable = $input['variables'] ?? [];
 
 try {
-    $result = GraphQL::executeQuery($schema, $query, null, null, $variableValues);
+    $result = GraphQL::executeQuery($schema, $query, null, null, $variable);
     $output = $result->toArray();
 } catch (\Exception $e) {
     $output = [
