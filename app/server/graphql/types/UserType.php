@@ -18,8 +18,9 @@ class UserType extends ObjectType
                     'id' => ['type' => Types::id()],
                     'email' => ['type' => Types::email()],
                     'name' => ['type' => Types::string()],
+                    'money' => ['type' => Types::int()],
                     'cats' => [
-                        'type' => Types::listOf(Types::cat()),
+                        'type' => Types::listOf(Types::u_cat()),
                         'resolve' => function($root){
                             return Db::query('SELECT * FROM cats WHERE owner_id = :owner_id', ['owner_id' => $root['id']]);
                         }

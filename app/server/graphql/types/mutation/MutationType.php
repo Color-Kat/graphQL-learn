@@ -36,7 +36,7 @@ class MutationType extends ObjectType
                         }
                     ],
                     'createCat'  => [
-                        'type'    => Types::cat(),
+                        'type'    => Types::u_cat(),
                         'args'    => [
                             'cat' => Types::inputCat()
                         ],

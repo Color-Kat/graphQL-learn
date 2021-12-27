@@ -19,6 +19,9 @@ class QueryType extends ObjectType
                             return Db::query('SELECT * FROM users');
                         }
                     ],
+//                    'cats' => [
+//                        'type'
+//                    ],
                     'user'  => [
                         'type'    => Types::user(),
                         'args'    => [

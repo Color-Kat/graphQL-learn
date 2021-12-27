@@ -7,6 +7,7 @@ use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Type\Definition\Type;
 use graphql\types\CatType;
+use graphql\types\UserCatType;
 use graphql\types\mutation\InputCatType;
 use graphql\types\mutation\InputUserType;
 use graphql\types\mutation\MutationType;
@@ -14,40 +15,89 @@ use graphql\types\QueryType;
 use graphql\types\scalar\EmailType;
 use graphql\types\UserType;
 
-class Types{
-    private static $query;
-    private static $mutation;
+class Types
+{
+    /**
+     * @var QueryType GraphQL query
+     */
+    private static QueryType $query;
 
-    private static $user;
-    private static $inputUser;
-    private static $cat;
-    private static $inputCat;
-
-    public static function query(): QueryType{
+    public static function query(): QueryType
+    {
         return self::$query ?: (self::$query = new QueryType());
     }
 
-    public static function mutation(): MutationType{
+    /**
+     * @var MutationType GraphQL mutation
+     */
+    private static MutationType $mutation;
+
+    public static function mutation(): MutationType
+    {
         return self::$mutation ?: (self::$mutation = new MutationType());
     }
 
-    public static function user(): UserType{
+    /**
+     * @var UserType type of user in table users
+     */
+    private static UserType $user;
+
+    public static function user(): UserType
+    {
         return self::$user ?: (self::$user = new UserType());
     }
 
-    public static function cat(): CatType{
-        return self::$cat ?: (self::$cat = new CatType());
-    }
+    /**
+     * @var InputUserType type of input user fields for registration
+     */
+    private static InputUserType $inputUser;
 
-    public static function inputUser(){
+    public static function inputUser()
+    {
         return self::$inputUser ?: (self::$inputUser = new InputUserType());
     }
 
-    public static function inputCat(){
+    /**
+     * @var CatType type of cat in table cats
+     */
+    private static CatType $cat;
+
+    public function cat(){
+        return self::$cat ?: (self::$cat = new CatType());
+    }
+
+    /**
+     * @var InputCatType type of input cat fields for create cats
+     */
+    private static InputCatType $inputCat;
+
+    public static function inputCat()
+    {
         return self::$inputCat ?: (self::$inputCat = new InputCatType());
     }
 
-    public static function string(): ScalarType{
+    /**
+     * @var UserCatType type of bought cat in u_cats table
+     */
+    private static UserCatType $u_cat;
+
+    public static function u_cat(): UserCatType
+    {
+        return self::$u_cat ?: (self::$u_cat = new UserCatType());
+    }
+
+    /**
+     * @var ScalarType scalar type of Email pattern
+     */
+    private static ScalarType $email;
+
+    public static function email(): ScalarType
+    {
+        return self::$email ?: (self::$email = new EmailType());
+    }
+
+    public static function string(): ScalarType
+    {
         return Type::string();
     }
 
@@ -56,18 +106,14 @@ class Types{
         return Type::int();
     }
 
-    public static function id(): ScalarType{
+    public static function id(): ScalarType
+    {
         return Type::id();
     }
 
-    public static function notNull($type): NonNull{
+    public static function notNull($type): NonNull
+    {
         return Type::nonNull($type);
-    }
-
-    private static $email;
-
-    public static function email(){
-        return self::$email ?: (self::$email = new EmailType());
     }
 
     public static function listOf($type): ListOfType
