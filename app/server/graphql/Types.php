@@ -7,10 +7,11 @@ use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Type\Definition\Type;
 use graphql\types\CatType;
-use graphql\types\InputCatType;
-use graphql\types\InputUserType;
-use graphql\types\MutationType;
+use graphql\types\mutation\InputCatType;
+use graphql\types\mutation\InputUserType;
+use graphql\types\mutation\MutationType;
 use graphql\types\QueryType;
+use graphql\types\scalar\EmailType;
 use graphql\types\UserType;
 
 class Types{
@@ -63,8 +64,10 @@ class Types{
         return Type::nonNull($type);
     }
 
+    private static $email;
+
     public static function email(){
-        return Type::string();
+        return self::$email ?: (self::$email = new EmailType());
     }
 
     public static function listOf($type): ListOfType

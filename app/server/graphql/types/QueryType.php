@@ -13,12 +13,6 @@ class QueryType extends ObjectType
         $config = [
             'fields' => function () {
                 return [
-                    'hello' => [
-                        'type'    => Types::string(),
-                        'resolve' => function () {
-                            return 'GraphQL';
-                        }
-                    ],
                     'users' => [
                         'type' => Types::listOf(Types::user()),
                         'resolve' => function(){
