@@ -27,7 +27,11 @@ class MutationType extends ObjectType
                                 'email' => $args['user']['email']
                             ];
 
-                            $id = Db::query('INSERT INTO users (name, password, email) VALUES (:name, :password, :email)', $params);
+                            $id = Db::query(
+                                'INSERT INTO users (name, password, email) 
+                                        VALUES (:name, :password, :email)',
+                                $params
+                            );
                             $user = Db::query('SELECT * FROM users WHERE id = :id', ['id' => $id])[0];
 
                             if(is_null($user)) throw new \Exception('Нет пользователя с таким id');
@@ -36,7 +40,7 @@ class MutationType extends ObjectType
                         }
                     ],
                     'createCat'  => [
-                        'type'    => Types::u_cat(),
+                        'type'    => Types::cat(),
                         'args'    => [
                             'cat' => Types::inputCat()
                         ],

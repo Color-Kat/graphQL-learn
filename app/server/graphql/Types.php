@@ -20,7 +20,7 @@ class Types
     /**
      * @var QueryType GraphQL query
      */
-    private static QueryType $query;
+    private static $query;
 
     public static function query(): QueryType
     {
@@ -30,7 +30,7 @@ class Types
     /**
      * @var MutationType GraphQL mutation
      */
-    private static MutationType $mutation;
+    private static $mutation;
 
     public static function mutation(): MutationType
     {
@@ -40,7 +40,7 @@ class Types
     /**
      * @var UserType type of user in table users
      */
-    private static UserType $user;
+    private static $user;
 
     public static function user(): UserType
     {
@@ -50,7 +50,7 @@ class Types
     /**
      * @var InputUserType type of input user fields for registration
      */
-    private static InputUserType $inputUser;
+    private static $inputUser;
 
     public static function inputUser()
     {
@@ -60,16 +60,16 @@ class Types
     /**
      * @var CatType type of cat in table cats
      */
-    private static CatType $cat;
+    private static $cat;
 
-    public function cat(){
+    public static function cat(): CatType{
         return self::$cat ?: (self::$cat = new CatType());
     }
 
     /**
      * @var InputCatType type of input cat fields for create cats
      */
-    private static InputCatType $inputCat;
+    private static $inputCat;
 
     public static function inputCat()
     {
@@ -79,7 +79,7 @@ class Types
     /**
      * @var UserCatType type of bought cat in u_cats table
      */
-    private static UserCatType $u_cat;
+    private static $u_cat;
 
     public static function u_cat(): UserCatType
     {
@@ -89,7 +89,7 @@ class Types
     /**
      * @var ScalarType scalar type of Email pattern
      */
-    private static ScalarType $email;
+    private static $email;
 
     public static function email(): ScalarType
     {

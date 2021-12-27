@@ -14,7 +14,8 @@ class InputUserType extends InputObjectType
                 return [
                     'name'     => Types::notNull(Types::string()),
                     'password' => Types::notNull(Types::string()),
-                    'email'    => Types::notNull(Types::email())
+                    'email'    => Types::notNull(Types::email()),
+                    'money'    => Types::int(),
                 ];
             }
         ];

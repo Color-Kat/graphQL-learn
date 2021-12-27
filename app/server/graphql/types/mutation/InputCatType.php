@@ -12,9 +12,9 @@ class InputCatType extends InputObjectType
         $config = [
             'fields' => function () {
                 return [
-                    'name' => ['type' =>(Types::string())],
-                    'picture' => ['type' => Types::string()],
-                    'owner_id' => ['type' =>   Types::notNull(Types::id())]
+                    'name' => ['type' =>Types::notNull(Types::string())],
+                    'properties' => ['type' => Types::notNull(Types::string())],
+                    'prise' => ['type' =>   Types::notNull(Types::int())]
                 ];
             }
         ];

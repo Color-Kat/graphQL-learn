@@ -15,7 +15,8 @@ class CatType extends ObjectType
                     'id' => ['type' => Types::id()],
                     'name' => ['type' => Types::string()],
                     'properties' => ['type' => Types::string()],
-                    'price' => ['type' => Types::int()]
+                    'price' => ['type' => Types::int()],
+                    'birthday' => ['type' => Types::string()]
                 ];
             }
         ];

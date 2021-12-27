@@ -14,8 +14,9 @@ class UserCatType extends ObjectType
                 return [
                     'id' => ['type' => Types::id()],
                     'name' => ['type' => Types::string()],
+                    'owner_id' => ['type' => Types::int()],
                     'properties' => ['type' => Types::string()],
-                    'owner_id' => ['type' => Types::int()]
+                    'birthday' => ['type' => Types::string()]
                 ];
             }
         ];
