@@ -12,11 +12,11 @@ class CatType extends ObjectType
         $config = [
             'fields' => function(){
                 return [
-                    'id' => ['type' => Types::id()],
-                    'name' => ['type' => Types::string()],
-                    'properties' => ['type' => Types::string()],
-                    'price' => ['type' => Types::int()],
-                    'birthday' => ['type' => Types::string()]
+                    'id' => ['type' => Types::notNull(Types::id())],
+                    'name' => ['type' => Types::notNull(Types::string())],
+                    'dna' => ['type' => Types::notNull(Types::string())],
+                    'price' => ['type' => Types::notNull(Types::int())],
+                    'birthday' => ['type' => Types::notNull(Types::string())]
                 ];
             }
         ];

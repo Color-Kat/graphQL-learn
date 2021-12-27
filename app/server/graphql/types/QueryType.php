@@ -20,7 +20,7 @@ class QueryType extends ObjectType
                         }
                     ],
                     'cats' => [
-                        'type' => Types::cat(),
+                        'type' => Types::listOf(Types::cat()),
                         'description' => 'get of pagination cats from table `cats`',
                         'args' => [
                             'page' => Types::int(),
@@ -28,12 +28,12 @@ class QueryType extends ObjectType
                         ],
                         'resolve' => function($root, $args) {
                             $page = $args['page'] ?? 1;
-                            $count = $args['count'] ?? 2;
+                            $count = $args['count'] ?? 5;
 
                             $start = ($page-1) * $count;
                             $end = $start +  $count;
 
-                            return Db::query("SELECT * FROM cats LIMIT $start, $end")[0];
+                            return Db::query("SELECT * FROM cats LIMIT $start, $end");
                         }
                     ],
                     'user'  => [
