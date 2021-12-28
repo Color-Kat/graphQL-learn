@@ -2,10 +2,14 @@
 
 require_once('vendor/autoload.php');
 
+session_start();
+
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use graphql\Types;
 use src\Db;
+
+const IS_DEV = true;
 
 Db::connectDb();
 
@@ -22,7 +26,7 @@ $variable = $input['variables'] ?? [];
 try {
     $result = GraphQL::executeQuery($schema, $query, null, null, $variable);
     $output = $result->toArray();
-} catch (\Exception $e) {
+} catch (\graphql\SaveException $e) {
     $output = [
         'errors' => [
             [

@@ -120,4 +120,9 @@ class Types
     {
         return Type::listOf($type);
     }
+
+    public static function boolean(): ScalarType
+    {
+        return Type::boolean();
+    }
 }

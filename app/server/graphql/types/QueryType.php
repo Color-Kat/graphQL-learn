@@ -32,6 +32,13 @@ class QueryType extends ObjectType
                             return Db::query('SELECT $selectedFields FROM users WHERE id = :id', ['id' => $args['id']])[0];
                         }
                     ],
+                    'isAuth' => [
+                        'type' => Types::boolean(),
+                        'description' => 'return true if user is logged in and return false if dont',
+                        'resolve' => function(){
+                            return isset($_SESSION['auth']);
+                        }
+                    ],
                     'cats' => [
                         'type' => Types::listOf(Types::cat()),
                         'description' => 'get of pagination cats from table `cats`',
