@@ -16,8 +16,20 @@ class QueryType extends ObjectType
                 return [
                     'users' => [
                         'type' => Types::listOf(Types::user()),
-                        'resolve' => function(){
-                            return Db::query('SELECT * FROM users');
+                        'resolve' => function($root, $args, $a, $resolverInfo){
+                            $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
+                            return Db::query("SELECT $selectedFields FROM users");
+                        }
+                    ],
+                    'user'  => [
+                        'type'    => Types::user(),
+                        'description' => 'get user data by id',
+                        'args'    => [
+                            'id' => Types::id()
+                        ],
+                        'resolve' => function ($root, $args, $a, $resolverInfo) {
+                            $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
+                            return Db::query('SELECT $selectedFields FROM users WHERE id = :id', ['id' => $args['id']])[0];
                         }
                     ],
                     'cats' => [
@@ -27,28 +39,20 @@ class QueryType extends ObjectType
                             'page' => Types::int(),
                             'count' => Types::int()
                         ],
-                        'resolve' => function($root, $args) {
+                        'resolve' => function($root, $args, $a, $resolverInfo) {
                             $page = $args['page'] ?? 1;
                             $count = $args['count'] ?? 5;
 
                             $start = ($page-1) * $count;
                             $end = $start +  $count;
 
-                            $result = Db::query("SELECT * FROM cats LIMIT $start, $end");
+                            $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
+
+                            $result = Db::query("SELECT $selectedFields FROM cats LIMIT $start, $end");
 
                             return !empty($result) ? $result : null;
                         }
                     ],
-                    'user'  => [
-                        'type'    => Types::user(),
-                        'description' => 'get user data by id',
-                        'args'    => [
-                            'id' => Types::id()
-                        ],
-                        'resolve' => function ($root, $args) {
-                            return Db::query('SELECT * FROM users WHERE id = :id', ['id' => $args['id']])[0];
-                        }
-                    ]
                 ];
             }
         ];
