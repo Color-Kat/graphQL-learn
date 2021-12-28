@@ -12,6 +12,7 @@ class CatType extends ObjectType
         $config = [
             'fields' => function(){
                 return [
+
                     'id' => ['type' => Types::notNull(Types::id())],
                     'name' => ['type' => Types::notNull(Types::string())],
                     'dna' => ['type' => Types::notNull(Types::string())],

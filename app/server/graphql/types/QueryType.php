@@ -2,6 +2,7 @@
 
 namespace graphql\types;
 
+use graphql\SaveException;
 use GraphQL\Type\Definition\ObjectType;
 use graphql\Types;
 use src\Db;
@@ -33,7 +34,9 @@ class QueryType extends ObjectType
                             $start = ($page-1) * $count;
                             $end = $start +  $count;
 
-                            return Db::query("SELECT * FROM cats LIMIT $start, $end");
+                            $result = Db::query("SELECT * FROM cats LIMIT $start, $end");
+
+                            return !empty($result) ? $result : null;
                         }
                     ],
                     'user'  => [

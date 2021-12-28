@@ -3,6 +3,7 @@
 namespace graphql\types\mutation;
 
 use GraphQL\Error\Error;
+use graphql\SaveException;
 use GraphQL\Type\Definition\ObjectType;
 use graphql\Types;
 use src\Db;
@@ -34,7 +35,7 @@ class MutationType extends ObjectType
                             );
                             $user = Db::query('SELECT * FROM users WHERE id = :id', ['id' => $id])[0];
 
-                            if(is_null($user)) throw new \Exception('Нет пользователя с таким id');
+                            if(is_null($user)) throw new \SaveException('Нет пользователя с таким id');
 
                             return $user;
                         }
