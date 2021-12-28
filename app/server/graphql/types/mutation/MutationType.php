@@ -35,19 +35,31 @@ class MutationType extends ObjectType
                             );
                             $user = Db::query('SELECT * FROM users WHERE id = :id', ['id' => $id])[0];
 
-                            if(is_null($user)) throw new \SaveException('Нет пользователя с таким id');
+                            if(is_null($user)) throw new SaveException('Нет пользователя с таким id');
 
                             return $user;
                         }
                     ],
                     'createCat'  => [
                         'type'    => Types::cat(),
+                        'description' => 'create new cat in table cats',
                         'args'    => [
                             'cat' => Types::inputCat()
                         ],
                         'resolve' => function ($root, $args) {
                             $id = Db::query('INSERT INTO cats (name, owner_id) VALUES (:name, :owner_id)', ['name' => $args['cat']['name'], 'owner_id' => $args['cat']['owner_id']]);
                             return Db::query('SELECT * FROM cats WHERE id = :id', ['id' => $id])[0];
+                        }
+                    ],
+                    'matingCats' => [
+                        'type' => Types::u_cat(),
+                        'description' => 'create new cats by ids of 2 parent cats. New cats have new DNA and the same owner',
+                        'args' => [
+                            'id_1' => Types::id(),
+                            'id_2' => Types::id()
+                        ],
+                        'resolve' => function($root, $args){
+                            print_r(123);
                         }
                     ]
                 ];
