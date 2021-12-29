@@ -1,6 +1,7 @@
 <?php
 
 require_once('vendor/autoload.php');
+require('./bootstrap.php');
 
 session_start();
 

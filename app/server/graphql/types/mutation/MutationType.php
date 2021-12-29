@@ -52,10 +52,14 @@ class MutationType extends ObjectType
                             'password' => Types::string()
                         ],
                         'resolve' => function($root, $args, $null, $resolverInfo) {
-//                            $_SESSION['auth'] = false;
+                            // user is already logged in
+                            if(isAuth()) {
+                                throw new SaveException('Вы уже авторизованны!');
+                            }
 
                             $selectedFields = $resolverInfo->getFieldSelection();
                             $selectedFields['password'] = 1; // add password to query
+                            $selectedFields['id'] = 1; // add password to query
                             $selectedFields = implode(", ", array_keys($selectedFields));
 
                             $user = Db::query(
@@ -70,6 +74,7 @@ class MutationType extends ObjectType
                                 throw new SaveException("Неверный пароль");
 
                             $_SESSION['auth'] = true;
+                            $_SESSION['user_id'] = $user['id'];
 
                             return $user;
                         }
@@ -79,6 +84,7 @@ class MutationType extends ObjectType
                         'description' => 'do log out by session removing',
                         'resolve' => function(){
                             unset($_SESSION['auth']);
+                            unset($_SESSION['user_id']);
                             return true;
                         }
                     ],
@@ -93,6 +99,26 @@ class MutationType extends ObjectType
                             return Db::query('SELECT * FROM cats WHERE id = :id', ['id' => $id])[0];
                         }
                     ],
+                    'buyCat' => [
+                        'type' => Types::boolean(),
+                        'description' => 'add cat in u_cats table, decrease money of user',
+                        'args' => [
+                            'cat_id' => Types::int()
+                        ],
+                        'resolve' => function($root, $args){
+                            if(!isAuth()) return false;
+
+                            $user_id = $_SESSION['user_id'];
+                            $user_money = Db::query(
+                                "SELECT money FROM users WHERE id = :user_id",
+                                ['user_id' => $user_id])[0];
+
+                            print_r($user_money);
+
+
+                            return true;
+                        }
+                    ]
 //                    'matingCats' => [
 //                        'type' => Types::u_cat(),
 //                        'description' => 'create new cats by ids of 2 parent cats. New cats have new DNA and the same owner',
