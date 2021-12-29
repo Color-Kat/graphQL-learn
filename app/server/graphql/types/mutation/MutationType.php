@@ -103,20 +103,48 @@ class MutationType extends ObjectType
                         'type' => Types::boolean(),
                         'description' => 'add cat in u_cats table, decrease money of user',
                         'args' => [
-                            'cat_id' => Types::int()
+                            'cat_id' => Types::notNull(Types::int()),
+                            'name' => Types::string()
                         ],
                         'resolve' => function($root, $args){
                             if(!isAuth()) return false;
 
                             $user_id = $_SESSION['user_id'];
+
+                            // get user's balance
                             $user_money = Db::query(
                                 "SELECT money FROM users WHERE id = :user_id",
-                                ['user_id' => $user_id])[0];
+                                ['user_id' => $user_id])[0]['money'];
 
-                            print_r($user_money);
+                            // get cat from db by id
+                            $cat = Db::query("SELECT * FROM cats WHERE id = :cat_id", ['cat_id' => $args['cat_id']])[0];
 
+                            // not enough money
+                            if($user_money < $cat['price']) return false;
 
-                            return true;
+                            try {
+                                // decrease user's money
+                                Db::query("UPDATE users SET money = :money WHERE id = :user_id",[
+                                    'money' => ($user_money - $cat['price']),
+                                    'user_id' => $user_id
+                                ]);
+
+                                // add new cat to u_cats table
+                                $cat_name = $args['name'] ?? $cat['name'];
+                                Db::query("INSERT u_cats (name, dna, owner_id) 
+                                            VALUES (:name, :dna, :owner_id)", [
+                                    'name' => $cat_name,
+                                    'dna' => $cat['dna'],
+                                    'owner_id' => $user_id
+                                ]);
+
+                                // delete cat from store (cats table)
+                                Db::query("DELETE FROM cats WHERE id=:cat_id", ['cat_id' => $args['cat_id']]);
+
+                                return true;
+                            }catch(\Exception $e){
+                                throw new SaveException('Произошла какая-то ошибка: '.$e->getMessage());
+                            }
                         }
                     ]
 //                    'matingCats' => [
