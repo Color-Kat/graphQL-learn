@@ -41,7 +41,6 @@ class MutationType extends ObjectType
                             }
 
                             if(is_null($user)) throw new SaveException('Нет пользователя с таким id');
-
                             return $user;
                         }
                     ],
@@ -52,9 +51,27 @@ class MutationType extends ObjectType
                             'email' => Types::email(),
                             'password' => Types::string()
                         ],
-                        'resolve' => function($root, $args) {
+                        'resolve' => function($root, $args, $null, $resolverInfo) {
+//                            $_SESSION['auth'] = false;
+
+                            $selectedFields = $resolverInfo->getFieldSelection();
+                            $selectedFields['password'] = 1; // add password to query
+                            $selectedFields = implode(", ", array_keys($selectedFields));
+
+                            $user = Db::query(
+                                "SELECT $selectedFields FROM users WHERE email = :email",
+                                ['email' => $args['email']]
+                            )[0];
+
+                            if(empty($user))
+                                throw new SaveException("Такого пользователя не существует");
+
+                            if(!password_verify($args['password'], $user['password']))
+                                throw new SaveException("Неверный пароль");
+
                             $_SESSION['auth'] = true;
-                            return ['name'=>'color'];
+
+                            return $user;
                         }
                     ],
                     'logout' => [

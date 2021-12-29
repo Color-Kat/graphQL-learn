@@ -4,6 +4,7 @@ require_once('vendor/autoload.php');
 
 session_start();
 
+use GraphQL\Error\FormattedError;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use graphql\Types;
@@ -24,7 +25,17 @@ $query = $input['query'];
 $variable = $input['variables'] ?? [];
 
 try {
-    $result = GraphQL::executeQuery($schema, $query, null, null, $variable);
+    $myErrorFormatter = function(\GraphQL\Error\Error $error) {
+        return FormattedError::createFromException($error);
+    };
+
+    $myErrorHandler = function(array $errors, callable $formatter) {
+        return array_map($formatter, $errors);
+    };
+
+    $result = GraphQL::executeQuery($schema, $query, null, null, $variable)
+        ->setErrorFormatter($myErrorFormatter)
+        ->setErrorsHandler($myErrorHandler);
     $output = $result->toArray();
 } catch (\graphql\SaveException $e) {
     $output = [

@@ -36,7 +36,7 @@ class QueryType extends ObjectType
                         'type' => Types::boolean(),
                         'description' => 'return true if user is logged in and return false if dont',
                         'resolve' => function(){
-                            return isset($_SESSION['auth']);
+                            return isset($_SESSION['auth']) && $_SESSION['auth'];
                         }
                     ],
                     'cats' => [
