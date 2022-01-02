@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useMemo} from 'react';
 
 import './App.css';
 
@@ -70,24 +70,60 @@ import './App.css';
 // }
 
 // useRef
-function App() {
-    const inputRef = useRef(null);
+// function App() {
+//     const inputRef = useRef(null);
 
-    // ref doesn't call rerender components
+//     // ref doesn't call rerender components
     
-    function focus() {
-        if (!inputRef.current) return;
-        (inputRef.current as any).focus();
-    }
+//     function focus() {
+//         if (!inputRef.current) return;
+//         (inputRef.current as any).focus();
+//     }
+
+//     return (
+//         <div className="App">
+//             <div>
+//                 <input type="text" ref={inputRef} />
+//                 <button onClick={focus}>Focus</button>
+//             </div>
+//         </div>
+//     );
+// }
+
+
+function hardMathematic(num: number) {
+    let i = 0;
+
+    while (i < 1000000000) i++;
+
+    return num + 1;
+}
+
+// useMemo
+function App() {
+    const [number, setNumber] = useState(0);
+    const [color, setColor] = useState(true);
+
+    let style = useMemo(() => ({
+        color: color ? 'green' : 'red'
+    }), [color]);
+
+    useEffect(() => console.log('updated'), [style]);
+
+    // useMemo save the first value and update it only if this value is changed
+    const num = useMemo(()=>(hardMathematic(number)), [number]);
 
     return (
         <div className="App">
             <div>
-                <input type="text" ref={inputRef} />
-                <button onClick={focus}>Focus</button>
+                <span style={style}>{num}</span>
+                <button onClick={() => setNumber(prev => prev + 1)}>increase</button>
+                <button onClick={()=>setColor(prev => !prev)}>change color</button>
+
             </div>
         </div>
     );
 }
+
 
 export default App;
