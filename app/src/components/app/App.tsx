@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 
 import './App.css';
 
@@ -34,28 +34,57 @@ import './App.css';
 // }
 
 // useEffect
-function App() {
-    const [page, setPage] = useState('posts');
-    const [content, setContent] = useState('Loading');
+// function App() {
+//     const [page, setPage] = useState('posts');
+//     const [content, setContent] = useState('Loading');
     
-    useEffect(() => {
-        setContent('Loading');
-        fetch(`https://jsonplaceholder.typicode.com/${page}/1`)
-            .then(response => response.json())
-            .then(json => setContent(JSON.stringify(json, null, 2))
-            )
+//     useEffect(() => {
+//         setContent('Loading');
+//         fetch(`https://jsonplaceholder.typicode.com/${page}/1`)
+//             .then(response => response.json())
+//             .then(json => setContent(JSON.stringify(json, null, 2))
+//             );
                     
-    }, [page]);
+//     }, [page]);
+
+//     useEffect(() => {
+//         console.log('componentDidMount');
+
+//         return () => {
+//             console.log('componentWillUnmount');
+//         }
+//     }, []);
+
+//     return (
+//         <div className="App">
+//             <div>
+//                 <h1>{page}</h1>
+//                 <button onClick={()=>setPage('posts')}>Posts</button>
+//                 <button onClick={() => setPage('photos')}>photos</button>
+//                 <button onClick={() => setPage('users')}>users</button>
+//                 <br />
+//                 <span ><pre>{content}</pre></span>
+//             </div>
+//         </div>
+//     );
+// }
+
+// useRef
+function App() {
+    const inputRef = useRef(null);
+
+    // ref doesn't call rerender components
+    
+    function focus() {
+        if (!inputRef.current) return;
+        (inputRef.current as any).focus();
+    }
 
     return (
         <div className="App">
             <div>
-                <h1>{page}</h1>
-                <button onClick={()=>setPage('posts')}>Posts</button>
-                <button onClick={() => setPage('photos')}>photos</button>
-                <button onClick={() => setPage('users')}>users</button>
-                <br />
-                <span ><pre>{content}</pre></span>
+                <input type="text" ref={inputRef} />
+                <button onClick={focus}>Focus</button>
             </div>
         </div>
     );
