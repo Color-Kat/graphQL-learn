@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useMemo} from 'react';
+import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 
 import './App.css';
 
@@ -91,35 +91,79 @@ import './App.css';
 // }
 
 
-function hardMathematic(num: number) {
-    let i = 0;
+// function hardMathematic(num: number) {
+//     let i = 0;
 
-    while (i < 1000000000) i++;
+//     while (i < 1000000000) i++;
 
-    return num + 1;
+//     return num + 1;
+// }
+
+// // useMemo
+// function App() {
+//     const [number, setNumber] = useState(0);
+//     const [color, setColor] = useState(true);
+
+//     let style = useMemo(() => ({
+//         color: color ? 'green' : 'red'
+//     }), [color]);
+
+//     useEffect(() => console.log('updated'), [style]);
+
+//     // useMemo save the first value and update it only if this value is changed
+//     const num = useMemo(()=>(hardMathematic(number)), [number]);
+
+//     return (
+//         <div className="App">
+//             <div>
+//                 <span style={style}>{num}</span>
+//                 <button onClick={() => setNumber(prev => prev + 1)}>increase</button>
+//                 <button onClick={()=>setColor(prev => !prev)}>change color</button>
+
+//             </div>
+//         </div>
+//     );
+// }
+
+// useCallback
+function ItemsList({ getItems }: any) {
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        setItems(getItems());
+    }, [getItems]);
+
+    return (
+        <ul>
+            {items.map(item => 
+                <li key={item}>{item}</li>
+            )}
+        </ul>
+    );
 }
 
-// useMemo
 function App() {
-    const [number, setNumber] = useState(0);
+    const [number, setNumber] = useState(1);
     const [color, setColor] = useState(true);
 
     let style = useMemo(() => ({
         color: color ? 'green' : 'red'
     }), [color]);
 
-    useEffect(() => console.log('updated'), [style]);
-
-    // useMemo save the first value and update it only if this value is changed
-    const num = useMemo(()=>(hardMathematic(number)), [number]);
+    // caches function execution for deps [number]
+    // useMemo return result of func, useCallback return func
+    const getItems = useCallback(() => {
+        return new Array(number).fill('').map((item, i) => `Item ${i}`);
+    }, [number]);
 
     return (
         <div className="App">
             <div>
-                <span style={style}>{num}</span>
+                <h1 style={style}>Counter: {number}</h1> <br />
                 <button onClick={() => setNumber(prev => prev + 1)}>increase</button>
-                <button onClick={()=>setColor(prev => !prev)}>change color</button>
-
+                <button onClick={() => setColor(prev => !prev)}>change color</button>
+                
+                <ItemsList getItems={ getItems }/>
             </div>
         </div>
     );
