@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
+import React, {useEffect, useState, useRef, useMemo, useCallback, useContext} from 'react';
 
 import './App.css';
 
@@ -126,48 +126,90 @@ import './App.css';
 // }
 
 // useCallback
-function ItemsList({ getItems }: any) {
-    const [items, setItems] = useState([]);
+// function ItemsList({ getItems }: any) {
+//     const [items, setItems] = useState([]);
 
-    useEffect(() => {
-        setItems(getItems());
-    }, [getItems]);
+//     useEffect(() => {
+//         setItems(getItems());
+//     }, [getItems]);
+
+//     return (
+//         <ul>
+//             {items.map(item => 
+//                 <li key={item}>{item}</li>
+//             )}
+//         </ul>
+//     );
+// }
+
+// function App() {
+//     const [number, setNumber] = useState(1);
+//     const [color, setColor] = useState(true);
+
+//     let style = useMemo(() => ({
+//         color: color ? 'green' : 'red'
+//     }), [color]);
+
+//     // caches function execution for deps [number]
+//     // useMemo return result of func, useCallback return func
+//     const getItems = useCallback(() => {
+//         return new Array(number).fill('').map((item, i) => `Item ${i}`);
+//     }, [number]);
+
+//     return (
+//         <div className="App">
+//             <div>
+//                 <h1 style={style}>Counter: {number}</h1> <br />
+//                 <button onClick={() => setNumber(prev => prev + 1)}>increase</button>
+//                 <button onClick={() => setColor(prev => !prev)}>change color</button>
+                
+//                 <ItemsList getItems={ getItems }/>
+//             </div>
+//         </div>
+//     );
+// }
+
+// ===== useContext ===== //
+function Main({togleAlert}: {togleAlert: any}) {
+
 
     return (
-        <ul>
-            {items.map(item => 
-                <li key={item}>{item}</li>
-            )}
-        </ul>
+        <main>
+            <p>You have a new message</p>
+            <button onClick={togleAlert}>Show message</button>
+        </main>
     );
 }
 
-function App() {
-    const [number, setNumber] = useState(1);
-    const [color, setColor] = useState(true);
+function Alert() {
+    const alert = useContext(AlertContext);
 
-    let style = useMemo(() => ({
-        color: color ? 'green' : 'red'
-    }), [color]);
-
-    // caches function execution for deps [number]
-    // useMemo return result of func, useCallback return func
-    const getItems = useCallback(() => {
-        return new Array(number).fill('').map((item, i) => `Item ${i}`);
-    }, [number]);
-
+    if (!alert) return null;
+        
     return (
-        <div className="App">
-            <div>
-                <h1 style={style}>Counter: {number}</h1> <br />
-                <button onClick={() => setNumber(prev => prev + 1)}>increase</button>
-                <button onClick={() => setColor(prev => !prev)}>change color</button>
-                
-                <ItemsList getItems={ getItems }/>
-            </div>
+        <div id="alert" style={{ background: 'lime', padding: '10px', color: 'green' }}>
+            <p>This is a message from Stephen Hawking.</p>
         </div>
     );
 }
 
+const AlertContext = React.createContext(false);
+
+function App() {
+    const [alert, setAlert] = useState(false);
+
+    const toggleAlert = () => { setAlert(prev => !prev) };
+
+    return (
+        <div className="App">
+            <AlertContext.Provider value={alert}>
+                <h1>Party for time Traveler</h1>
+                <Alert />
+                <Main togleAlert={toggleAlert}/>
+            </AlertContext.Provider>
+        </div>
+    );
+}
+// ^^^^^^ useContext ^^^^^^ //
 
 export default App;
