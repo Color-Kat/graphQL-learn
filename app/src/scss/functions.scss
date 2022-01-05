@@ -1,0 +1,17 @@
+// px to %
+@function prc($px_1, $px_2){
+    $result: math.div($px_1, $px_2) * 100%;
+    @return $result;
+}
+
+// px to rem
+@function rem($px){
+    $result: math.div($px, 16) + rem;
+    @return $result;
+}
+
+// px to em
+@function em($px){
+    $result: math.div($px, 16) + em;
+    @return $result;
+}
