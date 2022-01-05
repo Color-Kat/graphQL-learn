@@ -170,46 +170,80 @@ import './App.css';
 // }
 
 // ===== useContext ===== //
-function Main({togleAlert}: {togleAlert: any}) {
+// function Main({togleAlert}: {togleAlert: any}) {
+//     return (
+//         <main>
+//             <p>You have a new message</p>
+//             <button onClick={togleAlert}>Show message</button>
+//         </main>
+//     );
+// }
 
+// function Alert() {
+//     const alert = useContext(AlertContext);
 
-    return (
-        <main>
-            <p>You have a new message</p>
-            <button onClick={togleAlert}>Show message</button>
-        </main>
-    );
-}
-
-function Alert() {
-    const alert = useContext(AlertContext);
-
-    if (!alert) return null;
+//     if (!alert) return null;
         
-    return (
-        <div id="alert" style={{ background: 'lime', padding: '10px', color: 'green' }}>
-            <p>This is a message from Stephen Hawking.</p>
-        </div>
-    );
+//     return (
+//         <div id="alert" style={{ background: 'lime', padding: '10px', color: 'green' }}>
+//             <p>This is a message from Stephen Hawking.</p>
+//         </div>
+//     );
+// }
+
+// const AlertContext = React.createContext(false);
+
+// function App() {
+//     const [alert, setAlert] = useState(false);
+
+//     const toggleAlert = () => { setAlert(prev => !prev) };
+
+//     return (
+//         <div className="App">
+//             <AlertContext.Provider value={alert}>
+//                 <h1>Party for time Traveler</h1>
+//                 <Alert />
+//                 <Main togleAlert={toggleAlert}/>
+//             </AlertContext.Provider>
+//         </div>
+//     );
+// }
+// ^^^^^^ useContext ^^^^^^ //
+
+// === my hook === //
+function useLogger(value: any) {
+    useEffect(() => {
+        console.log('update', value);
+    }, [value]);
 }
 
-const AlertContext = React.createContext(false);
+function useInput(initialValue: string) {
+    const [value, setValue] = useState(initialValue);
+
+    const onChange = (e: any) => setValue(e.target.value);
+
+    const clear = () => setValue('');
+
+    return { 
+        bind: { value, onChange },
+        value,
+        clear
+     };
+}
 
 function App() {
-    const [alert, setAlert] = useState(false);
+    // const [text, setText] = useState('false');
+    const input = useInput('');
 
-    const toggleAlert = () => { setAlert(prev => !prev) };
+    useLogger(input);
 
     return (
         <div className="App">
-            <AlertContext.Provider value={alert}>
-                <h1>Party for time Traveler</h1>
-                <Alert />
-                <Main togleAlert={toggleAlert}/>
-            </AlertContext.Provider>
+            <input type="text" {...input.bind} /><button onClick={input.clear}>Clear</button>
+            <h3>{input.value}</h3>
+            
         </div>
     );
 }
-// ^^^^^^ useContext ^^^^^^ //
 
 export default App;
