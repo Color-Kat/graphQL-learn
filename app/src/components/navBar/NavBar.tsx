@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 
 export const NavBar: React.FC = () => {
+  const [isMenu, toggleMenu] = useState<boolean>(false);
+
+  const menuStyle = isMenu ? "max-h-screen" : "max-h-0";
+
+  function toggleMenuHandler() {
+    toggleMenu((prev) => !prev);
+  }
+
   return (
     <nav className="bg-amber-600">
       <div className="container mx-auto flex items-center justify-between flex-wrap p-5">
@@ -13,7 +21,10 @@ export const NavBar: React.FC = () => {
           </a>
         </div>
         <div className="block lg:hidden">
-          <button className="flex items-center px-3 py-2 border rounded bg-amber-100 border-teal-400 hover:text-white hover:border-white">
+          <button
+            onClick={toggleMenuHandler}
+            className="flex items-center px-3 py-2 border rounded bg-amber-100 border-teal-400 hover:text-white hover:border-white"
+          >
             <svg
               className="fill-current h-3 w-3"
               viewBox="0 0 20 20"
@@ -24,11 +35,16 @@ export const NavBar: React.FC = () => {
             </svg>
           </button>
         </div>
-        <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div
+          className={
+            "w-full block flex-grow lg:flex lg:items-center lg:w-auto overflow-hidden transition-all " +
+            menuStyle
+          }
+        >
           <div className="text-2xl lg:flex-grow mt-5 lg:mt-0 border-t-2 border-amber-100 lg:border-none">
             <a
               href="#responsive-header"
-              className="block mt-4 lg:inline-block lg:mt-0 text-amber-100 hover:text-white lg:mr-10 hover:scale-105"
+              className="block mt-4 lg:inline-block lg:mt-0 text-amber-100 hover:text-white lg:mr-10 hover:scale-105 lg:p-0 p-2"
             >
               My cats
             </a>
