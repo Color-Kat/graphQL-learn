@@ -1,9 +1,30 @@
-import React, { useState } from "react";
+import { linkSync } from "fs";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-export const NavBar: React.FC = () => {
+interface INavProps {
+  links: { title: string; path: string }[];
+}
+
+export const NavBar: React.FC<INavProps> = ({ links }) => {
   const [isMenu, toggleMenu] = useState<boolean>(false);
 
-  const menuStyle = isMenu ? "max-h-screen" : "max-h-0";
+  const menuStyle = isMenu ? "max-h-screen" : "max-h-0 lg:max-h-full";
+
+  const hideMenu = () => toggleMenu(false);
+
+  // hide menu when resize
+  useEffect(() => {
+    window.addEventListener("resize", hideMenu);
+
+    return () => {
+      window.removeEventListener("resize", hideMenu);
+    };
+  }, []);
+
+  // hide menu when navigation
+  let location = useLocation()
+  useEffect(hideMenu, [location.pathname]);
 
   function toggleMenuHandler() {
     toggleMenu((prev) => !prev);
@@ -13,12 +34,12 @@ export const NavBar: React.FC = () => {
     <nav className="bg-amber-600">
       <div className="container mx-auto flex items-center justify-between flex-wrap p-5">
         <div className="flex items-center flex-shrink-0 text-amber-100 mr-6">
-          <a
+          <Link
             className="w-56 text-center font-semibold text-3xl tracking-tight hover:tracking-tighter"
-            href="#"
+            to="/"
           >
             &gt;MoneyKitties&lt;
-          </a>
+          </Link>
         </div>
         <div className="block lg:hidden">
           <button
@@ -42,32 +63,23 @@ export const NavBar: React.FC = () => {
           }
         >
           <div className="text-2xl lg:flex-grow mt-5 lg:mt-0 border-t-2 border-amber-100 lg:border-none">
-            <a
-              href="#responsive-header"
-              className="block mt-4 lg:inline-block lg:mt-0 text-amber-100 hover:text-white lg:mr-10 hover:scale-105 lg:p-0 p-2"
-            >
-              My cats
-            </a>
-            <a
-              href="#responsive-header"
-              className="block mt-4 lg:inline-block lg:mt-0 text-amber-100 hover:text-white lg:mr-10 hover:scale-105"
-            >
-              Cats shop
-            </a>
-            <a
-              href="#responsive-header"
-              className="block mt-4 lg:inline-block lg:mt-0 text-amber-100 hover:text-white hover:scale-105"
-            >
-              users
-            </a>
+            {links.map((link) => (
+              <Link
+                to={link.path}
+                key={link.path}
+                className="block mt-4 lg:inline-block lg:mt-0 text-amber-100 hover:text-white lg:mr-10 hover:scale-105 lg:p-0 p-2"
+              >
+                {link.title}
+              </Link>
+            ))}
           </div>
           <div>
-            <a
-              href="#"
+            <Link
+              to="/login"
               className="inline-block text-sm px-4 py-2 leading-none border rounded text-amber-100 border-white hover:border-transparent hover:text-amber-600 hover:bg-amber-100 mt-4 lg:mt-0"
             >
               Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>
