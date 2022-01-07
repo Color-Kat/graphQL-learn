@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Home } from "../home/Home";
 import { Login } from "../login/Login";
+import { Register } from "../register/Register";
 
 export const Main: React.FC = () => {
   return (
@@ -9,6 +10,7 @@ export const Main: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="*" element={<h1>404 - PageNotFound, MEOW</h1>} />
       </Routes>
     </main>
