@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { GET_ALL_USERS } from "../../query/user";
 
 interface ILoginUser {
   name: string;
@@ -12,7 +14,7 @@ export const Login: React.FC = () => {
     password: "",
   });
 
-  const error: string = "";
+  const errorStr: string = "";
 
   function nameHandler(event: React.ChangeEvent<HTMLInputElement>): void {
     setLoginData((prev) => ({ ...prev, name: event.target.value }));
@@ -25,6 +27,16 @@ export const Login: React.FC = () => {
   const loginHandler = (e: React.FormEvent) => {
     e.preventDefault();
   };
+
+  // ----------------
+  const { data, loading, error } = useQuery(GET_ALL_USERS);
+
+  useEffect(() => {
+    console.log(data);
+    console.log(error);
+  }, [data, error]);
+
+  // ----------------
 
   return (
     <div id="login-form">
@@ -69,7 +81,7 @@ export const Login: React.FC = () => {
             value={loginData.password}
             placeholder="***************"
           />
-          <p className="text-red-500 text-xs italic">{error}</p>
+          <p className="text-red-500 text-xs italic">{errorStr}</p>
         </div>
         <div className="flex items-center justify-between">
           <button

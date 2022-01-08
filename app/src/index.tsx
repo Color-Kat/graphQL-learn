@@ -1,18 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import "./index.scss";
 import App from "./components/app/App";
 
 const apollo = new ApolloClient({
-  uri: "http://127.0.0.1/graphql.php",
+  uri: "http://127.0.0.1:8080/server/graphql.php",
   cache: new InMemoryCache(),
 });
 

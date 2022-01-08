@@ -2,6 +2,7 @@
 
 namespace graphql\types;
 
+use Exception;
 use graphql\SaveException;
 use GraphQL\Type\Definition\ObjectType;
 use graphql\Types;
@@ -16,26 +17,30 @@ class QueryType extends ObjectType
                 return [
                     'users' => [
                         'type' => Types::listOf(Types::user()),
-                        'resolve' => function($root, $args, $a, $resolverInfo){
-                            $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
-                            return Db::query("SELECT $selectedFields FROM users");
+                        'resolve' => function ($root, $args, $a, $resolverInfo) {
+
+                            // $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
+                            // return Db::query("SELECT $selectedFields FROM users");
+                            return Db::query("SELECT * FROM users");
                         }
                     ],
                     'user'  => [
                         'type'    => Types::user(),
                         'description' => 'get user data by id',
                         'args'    => [
-                            'id' => Types::id()
+                            'id' => Types::notNull(Types::id())
                         ],
                         'resolve' => function ($root, $args, $a, $resolverInfo) {
                             $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
-                            return Db::query('SELECT $selectedFields FROM users WHERE id = :id', ['id' => $args['id']])[0];
+                            // echo "SELECT $selectedFields FROM users WHERE id = :id";
+
+                            return Db::query("SELECT * FROM users WHERE id = :id", ['id' => $args['id']])[0];
                         }
                     ],
                     'isAuth' => [
                         'type' => Types::boolean(),
                         'description' => 'return true if user is logged in and return false if dont',
-                        'resolve' => function(){
+                        'resolve' => function () {
                             return isset($_SESSION['auth']) && $_SESSION['auth'];
                         }
                     ],
@@ -46,11 +51,11 @@ class QueryType extends ObjectType
                             'page' => Types::int(),
                             'count' => Types::int()
                         ],
-                        'resolve' => function($root, $args, $a, $resolverInfo) {
+                        'resolve' => function ($root, $args, $a, $resolverInfo) {
                             $page = $args['page'] ?? 1;
                             $count = $args['count'] ?? 5;
 
-                            $start = ($page-1) * $count;
+                            $start = ($page - 1) * $count;
                             $end = $start +  $count;
 
                             $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
