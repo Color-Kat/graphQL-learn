@@ -34,7 +34,12 @@ class QueryType extends ObjectType
                             $selectedFields = implode(", ", array_keys($resolverInfo->getFieldSelection()));
                             // echo "SELECT $selectedFields FROM users WHERE id = :id";
 
-                            return Db::query("SELECT * FROM users WHERE id = :id", ['id' => $args['id']])[0];
+
+                            try {
+                                return Db::query("SELECT * FROM users WHERE id = :id", ['id' => $args['id']])[0];
+                            } catch (\Throwable $e) {
+                                throw new SaveException($e->getMessage());
+                            }
                         }
                     ],
                     'isAuth' => [
@@ -52,6 +57,7 @@ class QueryType extends ObjectType
                             'count' => Types::int()
                         ],
                         'resolve' => function ($root, $args, $a, $resolverInfo) {
+                            echo 123123;
                             $page = $args['page'] ?? 1;
                             $count = $args['count'] ?? 5;
 

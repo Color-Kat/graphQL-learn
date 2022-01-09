@@ -41,7 +41,7 @@ try {
         ->setErrorFormatter($myErrorFormatter)
         ->setErrorsHandler($myErrorHandler);
     $output = $result->toArray();
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     $output = [
         'errors' => [
             [

@@ -21,8 +21,14 @@ class UserType extends ObjectType
                     'money' => ['type' => Types::int()],
                     'cats' => [
                         'type' => Types::listOf(Types::u_cat()),
-                        'resolve' => function($root){
-                            return Db::query('SELECT * FROM cats WHERE owner_id = :owner_id', ['owner_id' => $root['id']]);
+                        'resolve' => function ($root) {
+                            try {
+                                $result =  Db::query('SELECT * FROM u_cats WHERE owner_id = :owner_id', ['owner_id' => $root['id']]);
+
+                                return !empty($result) ? $result : [];
+                            } catch (\Throwable $e) {
+                                echo $e->getMessage();
+                            }
                         }
                     ],
                     'reg_date' => ['type' => Types::string()],

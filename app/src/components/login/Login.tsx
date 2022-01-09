@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { GET_ALL_USERS } from "../../query/user";
+import { GET_ALL_USERS, GET_USER_BY_ID } from "../../query/user";
 
 interface ILoginUser {
   name: string;
@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
   };
 
   // ----------------
-  const { data, loading, error } = useQuery(GET_ALL_USERS);
+  const { data, loading, error } = useQuery(GET_USER_BY_ID, {variables: {id: 6}});
 
   useEffect(() => {
     console.log(data);
