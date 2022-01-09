@@ -1,42 +1,62 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { LOGIN } from "../../graphql/mutations";
 import { GET_ALL_USERS, GET_USER_BY_ID } from "../../graphql/queries";
 
 interface ILoginUser {
-  name: string;
+  email: string;
   password: string;
 }
 
 export const Login: React.FC = () => {
   const [loginData, setLoginData] = useState<ILoginUser>({
-    name: "",
+    email: "",
     password: "",
   });
 
-  const errorStr: string = "";
+  const [errorStr, setErrorStr] = useState<string>("");
 
-  function nameHandler(event: React.ChangeEvent<HTMLInputElement>): void {
-    setLoginData((prev) => ({ ...prev, name: event.target.value }));
+  function emailHandler(event: React.ChangeEvent<HTMLInputElement>): void {
+    setLoginData((prev) => ({ ...prev, email: event.target.value }));
   }
 
   function passwordHandler(event: React.ChangeEvent<HTMLInputElement>): void {
     setLoginData((prev) => ({ ...prev, password: event.target.value }));
   }
 
-  const loginHandler = (e: React.FormEvent) => {
+  const [doLogin] = useMutation(LOGIN);
+
+  const loginHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      let res = await doLogin({
+        variables: {
+          email: loginData.email,
+          password: loginData.password,
+        }
+      });
+
+      console.log('you are logged in!');
+      
+    } catch (error: any) {
+      console.log(error);
+      setErrorStr(error.toString());
+    }
+
+    // console.log(res.toString());
   };
 
   // ----------------
-  const { data, loading, error } = useQuery(GET_USER_BY_ID, {
-    variables: { id: 6 },
-  });
+  // const { data, loading, error } = useQuery(GET_USER_BY_ID, {
+  //   variables: { id: 6 },
+  // });
 
-  useEffect(() => {
-    console.log(data);
-    console.log(error);
-  }, [data, error]);
+  // useEffect(() => {
+  //   console.log(data);
+  //   console.log(error);
+  // }, [data, error]);
 
   // ----------------
 
@@ -57,15 +77,15 @@ export const Login: React.FC = () => {
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="username"
           >
-            Username
+            Email
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            onChange={nameHandler}
-            value={loginData.name}
-            placeholder="Username"
+            id="email"
+            type="email"
+            onChange={emailHandler}
+            value={loginData.email}
+            placeholder="email"
           />
         </div>
         <div className="mb-6">

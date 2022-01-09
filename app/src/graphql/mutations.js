@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client';
 
 export const LOGIN = gql`
-    query get_all_users{
-        users{
-            id, name, email, money, cats{id, name, dna, birthday}
+    mutation login($email: Email!, $password: String!){
+        login(email: $email, password: $password){
+            id, name, email, money
         }
     }
 `;
