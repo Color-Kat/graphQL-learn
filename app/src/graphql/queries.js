@@ -1,5 +1,11 @@
 import { gql } from '@apollo/client';
 
+export const IS_AUTH = gql`
+    query is_auth{
+        isAuth
+    }
+`;
+
 export const GET_ALL_USERS = gql`
     query get_all_users{
         users{

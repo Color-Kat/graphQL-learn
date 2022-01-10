@@ -8,7 +8,11 @@ export const Introduction: React.FC = () => {
       </h1>
       <p className="text-xl ">
         This is a project where you buy cats and breed them. And here you can
-        <img src="/images/welcome_cats.png" alt="welcome cats image" />
+        <img
+          src="/images/welcome_cats.png"
+          alt="welcome cats image"
+          className="m-auto"
+        />
       </p>
     </div>
   );

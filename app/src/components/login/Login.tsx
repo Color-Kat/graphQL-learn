@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IUser, UserContext } from "../../context/userContext";
 import { LOGIN } from "../../graphql/mutations";
 import { GET_ALL_USERS, GET_USER_BY_ID } from "../../graphql/queries";
 
@@ -27,6 +28,13 @@ export const Login: React.FC = () => {
 
   const [doLogin] = useMutation(LOGIN);
 
+  // function to change userContext
+  const { value, bind } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
+
   const loginHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -35,11 +43,13 @@ export const Login: React.FC = () => {
         variables: {
           email: loginData.email,
           password: loginData.password,
-        }
+        },
       });
 
-      console.log('you are logged in!');
-      
+      bind!({
+        isAuth: true,
+        user: res.data.login as any,
+      });
     } catch (error: any) {
       console.log(error);
       setErrorStr(error.toString());

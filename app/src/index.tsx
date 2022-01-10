@@ -8,6 +8,7 @@ import App from "./components/app/App";
 const apollo = new ApolloClient({
   uri: "http://127.0.0.1:8080/server/graphql.php",
   cache: new InMemoryCache(),
+  credentials: "include",
 });
 
 ReactDOM.render(
